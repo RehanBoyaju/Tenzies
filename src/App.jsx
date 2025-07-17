@@ -7,21 +7,30 @@ import { nanoid } from "nanoid"
 import Confetti from "./Components/Confetti"
 
 export default function App() {
-  const [dice, setDice] = React.useState( () => generateNewDice())
+  const [dice, setDice] = React.useState(() => generateNewDice())
+
+  const buttonRef = React.useRef(null);
 
   const allHeld = dice.every(die=>die.isHeld)
   const allSameValue = dice.every(die => dice[0].value === die.value)
-
   const gameWon = allHeld && allSameValue;
-  if(allHeld){
-    if(allSameValue){
-      console.log("Congrats you have won the game")
-    }
-    else{
-      console.log("Some tenzies are different")
-    }
-  }
 
+  React.useEffect(()=>{
+    if(gameWon){
+      buttonRef.current.focus();
+    }
+  },[gameWon])
+
+  
+  // if(allHeld){
+  //   if(allSameValue){  
+
+  //     console.log("Congrats you have won the game")
+  //   }
+  //   else{
+  //     console.log("Some tenzies are different")
+  //   }
+  // }
   // const [diceHeld, setDiceHeld] = React.useState(0);
 
   // React.useEffect(() => {
@@ -75,8 +84,6 @@ export default function App() {
 
       })
     }
-
-
     )
   }
 
@@ -117,7 +124,7 @@ export default function App() {
 
       </div>
 
-      <button onClick={rollDice} className="roll-dice">
+      <button onClick={rollDice} className="roll-dice" ref={buttonRef}>
         {gameWon?"New Game":"Roll"}
       </button>
 
